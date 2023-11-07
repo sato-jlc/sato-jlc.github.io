@@ -1,0 +1,27 @@
+<html>
+<head>
+<title>固定資産ラベル作成</title>
+<script type="module">
+import * as bpac from './bpac.js';
+window.DoPrint = async function DoPrint(){
+const theForm = document.getElementById("ValidForm");
+const objDoc = bpac.IDocument;
+const ret = await objDoc.Open("c:¥¥temp¥¥固定資産名.lbx");
+if (ret != false) {
+const objName = await objDoc.GetObject("objName");
+objName.Text = theForm.FixedAsset.value;
+objDoc.StartPrint("",0);
+objDoc.PrintOut(1,0);
+objDoc.EndPrint();
+objDoc.Close();
+}
+}
+</script>
+</head>
+<body>
+<form Id="ValidForm">
+固定資産名:<INPUT VALUE="asset1" NAME="FixedAsset" SIZE=30><br>
+<input TYPE="button" VALUE="印刷" onClick="DoPrint()">
+</form>
+</body>
+</html> 
