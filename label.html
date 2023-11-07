@@ -1,62 +1,27 @@
-<!DOCTYPE html>
 <html>
 <head>
-    <title>郵送クラゴノ検体ラベル作成</title>
-    <meta name="robots" content="noindex">
-    <script type="module">
-        import * as bpac from './bpac.js';
-
-        document.addEventListener('DOMContentLoaded', function() {
-            const params = new URLSearchParams(window.location.search);
-            const value1 = params.get('variable1');
-
-            // 現在の日付を取得し、yyyymmdd形式に変換
-            const today = new Date();
-            const formattedDate = `${today.getFullYear()}${String(today.getMonth()+1).padStart(2, '0')}${String(today.getDate()).padStart(2, '0')}`;
-
-            document.getElementById('Variable1').value = value1 || "";
-            document.getElementById('Variable2').value = formattedDate;
-
-            // 変数3を変数1と変数2の組み合わせとして生成
-            document.getElementById('Variable3').value = (value1 || "") + formattedDate;
-        });
-
-        window.DoPrint = async function DoPrint() {
-            const theForm = document.getElementById("ValidForm");
-            const objDoc = bpac.IDocument;
-            const ret = await objDoc.Open("c:¥¥shibuya.lbx");
-            if (ret != false) {
-                const objName1 = await objDoc.GetObject("objName1");
-                const objName2 = await objDoc.GetObject("objName2");
-                const objName3 = await objDoc.GetObject("objName3");
-
-                objName1.Text = theForm.Variable1.value;
-                objName2.Text = theForm.Variable2.value;
-                objName3.Text = theForm.Variable3.value;
-
-                objDoc.StartPrint("", 0);
-                objDoc.PrintOut(1, 0);
-                objDoc.EndPrint();
-                objDoc.Close();
-
-                        // タブを閉じる
-        window.close();
-
-            }
-        }
-    // ページ読み込み完了時にDoPrint関数を自動実行
-document.addEventListener('DOMContentLoaded', (event) => {
-    DoPrint();
-});
-
-    </script>
+<title>固定資産ラベル作成</title>
+<script type="module">
+import * as bpac from './bpac.js';
+window.DoPrint = async function DoPrint(){
+const theForm = document.getElementById("ValidForm");
+const objDoc = bpac.IDocument;
+const ret = await objDoc.Open("c:¥¥temp¥¥固定資産名.lbx");
+if (ret != false) {
+const objName = await objDoc.GetObject("objName");
+objName.Text = theForm.FixedAsset.value;
+objDoc.StartPrint("",0);
+objDoc.PrintOut(1,0);
+objDoc.EndPrint();
+objDoc.Close();
+}
+}
+</script>
 </head>
 <body>
-    <form id="ValidForm">
-        変数1:<input id="Variable1" value="" name="Variable1" size=30><br>
-        変数2:<input id="Variable2" value="" name="Variable2" size=30 readonly><br>
-        変数3:<input id="Variable3" value="" name="Variable3" size=30 readonly><br>
-        <input type="button" value="印刷" onClick="DoPrint()">
-    </form>
+<form Id="ValidForm">
+固定資産名:<INPUT VALUE="asset1" NAME="FixedAsset" SIZE=30><br>
+<input TYPE="button" VALUE="印刷" onClick="DoPrint()">
+</form>
 </body>
-</html>
+</html> 
